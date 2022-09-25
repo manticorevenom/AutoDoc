@@ -1,0 +1,192 @@
+1. Introduction
+
+    1.1 Purpose
+    The purpose of this document is to serve as the foundation for the Commandline Interface Library Inventory System.
+    The document will detail the specific features, requirements, assumptions, dependencies, and all other technical aspects of the software.
+    This document is for developers and project managers.
+
+    1.2 Scope
+    The Commandline Interface Library System will serve as a database for the library.
+    It will keep track of books, copies, and relative info.
+    The system will also allow the saving of data through a .csv file.
+    The benefits of this application is that it will be easy-to-use, extensible, and reliable.
+    The goal for this application is to replace the current database for the library.
+
+    1.3 Definitions and Abbreviations
+    SFREQ - Software functional requirement.
+    SNFREQ - Software non-functional requirement.
+
+    1.4 References
+    IEEE 830
+
+    1.5 Overview
+    The rest of the document will explain the features and related requirements.
+    Section 2 will give a high-level overview of the application.
+    Section 3 will be where the System Features and requirements will be documented.
+
+    1.6 Change History
+    2022.09.22 - Initial Draft, Hunter Leary
+
+2. Overall Description
+
+    2.1 Product Perspective
+    The system will be independent and self-contained.
+    <DIAGRAM HERE>
+
+        2.1.1 System Interfaces
+        Java JVM.
+
+        2.1.2 User Interfaces
+        Commandline menu.
+
+        2.1.3 Hardware Interfaces
+        None.
+
+        2.1.4 Software Interfaces
+        Java libraries and internal classes.
+
+        2.1.5 Communication Interfaces
+        None.
+
+        2.1.6 Memory
+        Standard heap allocation.
+
+        2.1.7 Operations
+        CRUD operations and search operations.
+
+        2.1.8 Site Adaptation Requirements
+        Java Version - OpenJDK 18.0.2
+
+    2.2 Product Functions
+    The system will serve as a database, keeping track of library inventory.
+
+    2.3 User Characteristics
+    Users will have average technical experience.
+
+    2.4 Constraints
+    Commandline
+    Java
+
+    2.5 Assumptions and Dependencies
+
+        2.5.1 Assumptions
+        Java support
+        Technical experience
+
+        2.5.2 Dependencies
+        Java Version - OpenJDK 18.0.2 or later
+
+3. Specific Requirements
+
+    3.1 External Interface Requirements
+
+        3.1.1 User Interfaces
+
+            3.1.1.1 Application
+            This will be the only user interface. This will be a commandline interface
+
+            3.1.1.2 Functional Requirements
+            SFREQ Application.CLI - The application shall provide a CLI interface.
+                class Application
+                public static void main(String[] args)
+            SFREQ Application.Menu - The application shall provide a menu.
+                public void menu()
+                public static void main(String[] args)
+            SFREQ Application.Options - The application shall provide menu options.
+                public enum Options
+
+        3.1.2 Hardware Interfaces
+        The application will need no direct hardware interfaces. The only "hardware" interface will be through the file browser.
+
+        3.1.3 Software Interfaces
+        The application will need no external software interfaces.
+
+        3.1.4 Communication Interfaces
+        The application will need no external communication interfaces.
+
+    3.2 System Features
+
+        3.2.1 Book
+
+            3.2.1.1 Introduction
+            The application will have book objects.
+
+            3.2.1.2 Associated Functional Requirements
+            SFREQ Book - The application shall be able store book objects in inventory.
+                class Book
+                public Book()
+            SFREQ Book.Author - The application will store information for the author of a book.
+                private String Author
+                private void setAuthor(String author)
+                public String getAuthor()
+            SFREQ Book.Publish - The application will store information for the publishing date of a book.
+                private LocalDate publishDate
+                private void setPublishDate(LocalDate date)
+                public LocalDate getPublishDate()
+            SFREQ Book.ISBN - The application shall store information for the ISBN of the book.
+                private String ISBN
+                private void setISBN(String isbn)
+                public String getISBN()
+            SFREQ Book.Title - The application shall store the information for the title of a book.
+                private String Title
+                private void setTitle(String title)
+                public String getTitle()
+            SFREQ Book.CopyNumber - The application shall store the information for the number of copies for a book.
+                private int copyNumber
+                private void setCopyNumber(int copies)
+                public int getCopyNumber()
+            SFREQ Book.checkoutList - The application shall store information about who has checked a book out.
+                private ArrayList<String> checkoutList
+                private void setCheckoutList(ArrayList<String> checkout)
+                public ArrayList<String> getCheckoutList()
+                public void checkout(String name)
+                public void returnBook(String name)
+            SFREQ Book.Language - The application shall store information about the language the book is in.
+                private String Language
+                private void setLanguage(String language)
+                public String getLanguage()
+            SFREQ Book.PageCount - The application shall store information about the page count for a book.
+                private int pageCount
+                private void setPageCount(int pages)
+                public int getPageCount()
+            SFREQ Book.Print - The application shall be able to print a book
+                public String toString()
+
+        3.2.2 BookList
+
+            3.2.2.1 Introduction
+            The application will have a BookList that will be used to perform operations on a list of books.
+            This will support the main functionality of the program.
+
+            3.2.2.2 Associated Functional Requirements
+            SFREQ BookList - The application will be able to store a BookList object.
+                class BookList
+                public BookList()
+                private ArrayList<Book> inventory
+            SFREQ BookList.Read - The application shall be able to read saved inventory.
+                private void read()
+            SFREQ BookList.Save - The application shall be able to save the inventory data.
+                public void save()
+            SFREQ BookList.Add - The application shall be able to add a book to the inventory.
+                public void add()
+                private boolean search()
+            SFREQ BookList.AddCopy - The application shall be able to add a copy of a book to the inventory.
+                public void addCopy()
+                private boolean search()
+            SFREQ BookList.Print - The application shall be able to print in various formats.
+                private boolean print()
+            SFREQ BookList.ProcessCheckout - The application shall process checkouts.
+                public void processCheckout()
+                private boolean search()
+            SFREQ BookList.ProcessReturn - The application shall process returns.
+                public void processReturn()
+                private boolean search()
+            SFREQ BookList.Delete - The application shall be able to delete books from inventory.
+                public void delete()
+                private boolean search()
+            SFREQ BookList.DeleteCopy - The application shall be able to delete copies for a book from inventory.
+                public void deleteCopy()
+                private boolean search()
+
+
+
