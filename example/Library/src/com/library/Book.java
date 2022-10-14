@@ -217,6 +217,12 @@ class Book {
     public String toString(){
         return Title;
     }
+    public void incrementCopy(){
+        copyNumber += 1;
+    }
+    public void decrementCopy(){
+        copyNumber -= 1;
+    }
     // Constructor(s)
     //............................................................................................
     /**
