@@ -9,10 +9,15 @@
  */
 package com.autodoc.autodoc;
 
+import java.util.Dictionary;
+
 // thinking of turning the document into a hashmap
 // this would allow us to update stuff easier
 class parseDoc implements Parse {
     // VARIABLES -------------------------
+
+    // idea is the line would be an int and the string would be contents of a line
+    //private Dictionary<Integer, String> doc;
     /**
      * Requirements list
      */

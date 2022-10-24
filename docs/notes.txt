@@ -13,3 +13,16 @@ Current: Application is being designed as semi-automated document generator. It 
 Future Improvements:
 
 Known Bugs:
+
+
+Ideas:
+
+                -> HashMap
+Doc -> parseDoc                         ->
+                -> RequirementsList
+                                                                                    ->  Updated Document
+                                               Auto -> Conflicts -> Resolutions ->
+                                                                                    ->  Updated Code
+                  -> HashMap
+Code -> parseCode                       ->
+                  -> RequirementsList

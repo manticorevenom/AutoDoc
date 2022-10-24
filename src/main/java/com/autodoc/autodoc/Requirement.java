@@ -26,6 +26,13 @@ class Requirement {
      * class headers that correspond to a requirement
      */
     private ArrayList<String> headers;
+    /**
+     * Requirement context
+     */
+    // need context because we only want to replace
+    // what we need to so we have to make sure to grab
+    // things correctly
+    // private String context;
 
     // SETTERS ---------------------------
 

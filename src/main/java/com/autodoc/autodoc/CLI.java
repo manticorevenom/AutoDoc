@@ -13,34 +13,33 @@ import java.util.Scanner;
 class CLI {
         private enum Options{
             def,
-            add,
-            addCopy,
-            print,
-            checkout,
-            bookReturn,
-            delete,
-            deleteCopy,
+            check,
+            update,
+            printConflicts,
+            printReqs,
+            addReq,
+            changeReg,
+            deleteReq,
             exit,
         }
 
         private static void menu(){
             Options menuOption = Options.def;
-            // need an instance of the list of students
-            //= new BookList();
+            // need an instance of the auto
+            Auto program = new Auto();
 
             // loop until the user exits
             while (true){
                 System.out.println();
                 System.out.print("""
                      Menu:
-                     1). Add a book.
-                     2). Add a copy of a book.
-                     3). Print the list of books
-                     4). Process a book checkout.
-                     5). Process a book return.
-                     6). Delete a book.
-                     7). Delete a copy of a book.
-                     8). Save and Exit.
+                     1). Check Requirements.
+                     2). Update Requirements.
+                     3). Print Conflicts.
+                     4). Print Requirements.
+                     5). Add Requirement.
+                     6). Delete Requirement.
+                     7). Save and Exit.
                      >\s""");
                 try{
                     // get input
@@ -56,30 +55,30 @@ class CLI {
                 switch(menuOption){
                     case def:
                         continue;
-                    case add:
-                        //inventory.add();
+                    case check:
+                        // program.check();
                         break;
-                    case addCopy:
-                        //inventory.addCopy();
+                    case update:
+                        // program.update();
                         break;
-                    case print:
-                        //inventory.print();
+                    case printConflicts:
+                        // program.conflicts();
                         break;
-                    case checkout:
-                        //inventory.processCheckout();
+                    case printReqs:
+                        // program.print();
                         break;
-                    case bookReturn:
-                        //inventory.processReturn();
+                    case addReq:
+                        // program.add();;
                         break;
-                    case delete:
+                    case changeReg:
+                        // program.change();
+                        break;
+                    case deleteReq:
                         //inventory.delete();
-                        break;
-                    case deleteCopy:
-                        //inventory.deleteCopy();
                         break;
                     case exit:
                         //this will save and exit
-                        //inventory.save();
+                        // program.exit();
                         break;
                     default:
                         break;

@@ -16,6 +16,16 @@ class Auto {
     private parseDoc document;
     private parseCode code;
 
+    // might want to store a list of conflicts
+    // conflicts will be between two requirements
+    // and will have a resolution
+    // might want to create a resolution type
+    // A resolution will be a requirement to replace/update/change
+    // a requirement in the list
+    // and then figure out how to resolve them
+    // private ArrayList<Conflicts> conflicts;
+
+
     public void check(){
         // check for conflicts
             // conflicts:
