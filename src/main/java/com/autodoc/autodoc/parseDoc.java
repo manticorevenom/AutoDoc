@@ -9,7 +9,10 @@
  */
 package com.autodoc.autodoc;
 
-import java.util.Dictionary;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.stream.Stream;
 
 // thinking of turning the document into a hashmap
 // this would allow us to update stuff easier
@@ -30,6 +33,10 @@ class parseDoc implements Parse {
      * Identifier
      */
     public String identifier;
+    /**
+     * Dictionary for storing the document
+     */
+    public HashMap<Integer, String> document;
     // SETTERS ---------------------------
 
     /**
@@ -54,6 +61,13 @@ class parseDoc implements Parse {
      */
     public void setIdentifier(String id) {
         identifier = id;
+    }
+    /**
+     * setDocument
+     * @param document - dictionary for the document
+     */
+    public void setDocument(HashMap<Integer, String> document){
+        this.document = document;
     }
     // GETTERS ---------------------------
 
@@ -80,6 +94,13 @@ class parseDoc implements Parse {
     public String getIdentifier() {
         return identifier;
     }
+    /**
+     * getDocument
+     * @return - returns the dictionary of the document
+     */
+    public HashMap<Integer, String> getDocument(){
+        return document;
+    }
     // METHODS ---------------------------
     /**
      * This method will parse the document
@@ -96,6 +117,17 @@ class parseDoc implements Parse {
         // the header to the req header list
         // might use a regex,
         // after everything is parsed the requirements list will be created
+        BufferedReader reader;
+        int lineCount = 0;
+        try {
+            reader = new BufferedReader(new FileReader(filePath));
+            Stream<String> lines = reader.lines();
+            // thinking
+            reader.close();
+        }
+        catch(Exception ex){
+            System.out.println("Error in parsing the document: " + ex.getMessage());
+        }
     }
     // CONSTRUCTORS ----------------------
 
@@ -106,8 +138,9 @@ class parseDoc implements Parse {
         list = new RequirementList();
         filePath = "example/Library/docs/srs.txt";
         identifier = "SFREQ";
+        document = new HashMap<>();
+        read();
     }
-
     /**
      * Constructor with parameters
      * @param reqs - list of requirements
@@ -118,5 +151,7 @@ class parseDoc implements Parse {
         setList(reqs);
         setFilePath(fp);
         setIdentifier(id);
+        setDocument(new HashMap<>());
+        read();
     }
 }

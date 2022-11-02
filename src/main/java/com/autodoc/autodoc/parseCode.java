@@ -25,6 +25,9 @@ class parseCode implements Parse {
      * Identifier that denotes a requirement
      */
     public String identifier;
+    /**
+     * Dictionary
+     */
     // SETTERS ---------------------------
 
     /**
@@ -99,6 +102,7 @@ class parseCode implements Parse {
         list = new RequirementList();
         filePath = "example/Library/src/com/library/BookList.java";
         identifier = "FREQ";
+        read();
     }
 
     /**
@@ -111,5 +115,6 @@ class parseCode implements Parse {
         setList(reqs);
         setFilePath(fp);
         setIdentifier(id);
+        read();
     }
 }

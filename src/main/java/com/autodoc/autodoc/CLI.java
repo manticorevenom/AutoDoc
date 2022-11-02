@@ -29,7 +29,7 @@ class CLI {
             Auto program = new Auto();
 
             // loop until the user exits
-            while (true){
+            while (!menuOption.equals(Options.exit)){
                 System.out.println();
                 System.out.print("""
                      Menu:
@@ -38,8 +38,9 @@ class CLI {
                      3). Print Conflicts.
                      4). Print Requirements.
                      5). Add Requirement.
-                     6). Delete Requirement.
-                     7). Save and Exit.
+                     6). Change Requirement.
+                     7). Delete Requirement.
+                     8). Save and Exit.
                      >\s""");
                 try{
                     // get input

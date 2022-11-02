@@ -12,6 +12,7 @@
  */
 package com.autodoc.autodoc;
 
+
 class Auto {
     private parseDoc document;
     private parseCode code;
