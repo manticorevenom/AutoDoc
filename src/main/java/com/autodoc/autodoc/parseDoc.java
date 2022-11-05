@@ -11,7 +11,9 @@ package com.autodoc.autodoc;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 // thinking of turning the document into a hashmap
@@ -37,6 +39,10 @@ class parseDoc implements Parse {
      * Dictionary for storing the document
      */
     public HashMap<Integer, String> document;
+    /**
+     * Keywords
+     */
+    public static ArrayList<String> keywords;
     // SETTERS ---------------------------
 
     /**
@@ -69,6 +75,12 @@ class parseDoc implements Parse {
     public void setDocument(HashMap<Integer, String> document){
         this.document = document;
     }
+    /**
+     * setKeywords
+     * @param keywords - keyword list
+     */
+    public void setKeywords(ArrayList<String> keywords){
+        parseDoc.keywords = keywords;}
     // GETTERS ---------------------------
 
     /**
@@ -101,6 +113,14 @@ class parseDoc implements Parse {
     public HashMap<Integer, String> getDocument(){
         return document;
     }
+
+    /**
+     * getKeywords
+     * @return - list of keywords
+     */
+    public static ArrayList<String> getKeywords() {
+        return keywords;
+    }
     // METHODS ---------------------------
     /**
      * This method will parse the document
@@ -108,25 +128,83 @@ class parseDoc implements Parse {
      * and then pulling the code headers
      */
     public void read(){
-        // reads line by line
-        // looks for the identifier
-        // grabs next word as the req tag
-        // then loops over the next few lines until
-        // it hits another identifier
-        // if the line is a header it adds
-        // the header to the req header list
-        // might use a regex,
-        // after everything is parsed the requirements list will be created
+
+        // FIRST HASHMAP
+        // then calculate difference of line between tags
+        ArrayList<Requirement> reqs = new ArrayList<>();
+
         BufferedReader reader;
         int lineCount = 0;
         try {
             reader = new BufferedReader(new FileReader(filePath));
-            Stream<String> lines = reader.lines();
-            // thinking
+
+            // grab each line and convert document into hash map
+            for( String line : reader.lines().toList()){
+                document.put(lineCount, line);
+                lineCount++;
+            }
+            // close reader
             reader.close();
         }
         catch(Exception ex){
             System.out.println("Error in parsing the document: " + ex.getMessage());
+        }
+        System.out.println(document.toString());
+
+        //relative line with identifier
+        int first = 0;
+        // relative second line with identifier
+        int second = 0;
+        // now try to parse the requirements
+        for( int line = 0; line < document.size(); line++){
+            // if a line contains the identifier
+            // look to the next identifier
+            if (document.get(line).equals(identifier)){
+                if( first == 0 ) {
+                    first = line;
+                }
+                else if( second == 0 ){
+                    second = line;
+                }
+            }
+
+            // if first and second are set
+            if(!(first == 0 && second == 0)){
+                for( int difference = first; difference < second; difference++){
+                    // get values for requirement
+                    String tag = null, context = null;
+                    ArrayList<String> headers = new ArrayList<>();
+
+                    // if the line contains the identifier
+                    if(document.get(difference).contains(identifier)) {
+                        // grab the line and split
+                        String[] values = document.get(difference).split(" ");
+                        tag = values[1];
+                        for (int lines = 2; lines < values.length; lines++) {
+                            context += values[lines];
+                        }
+                    }
+                    // otherwise it does not have an identifier
+                    else{
+                        // we loop over our keywords
+                        for(String keyword : keywords){
+                            // if it has a keyword it is a header
+                            if(document.get(difference).contains(keyword)){
+                                headers.add(document.get(difference));
+                            }
+                            // if it doesn't it is apart of the context
+                            else{
+                                context += document.get(difference);
+                            }
+                        }
+                    }
+                }
+                // set requirement to next requirement
+                first = second;
+                // default the second value
+                second = 0;
+
+            }
         }
     }
     // CONSTRUCTORS ----------------------
@@ -139,6 +217,8 @@ class parseDoc implements Parse {
         filePath = "example/Library/docs/srs.txt";
         identifier = "SFREQ";
         document = new HashMap<>();
+        String[] words = {"public", "private", "interface", "protected", "class"};
+        keywords = new ArrayList<>(List.of(words));
         read();
     }
     /**
@@ -146,12 +226,14 @@ class parseDoc implements Parse {
      * @param reqs - list of requirements
      * @param fp - file path for parse document
      * @param id - identifier for searching
+     * @param keywords - list of words
      */
-    public parseDoc(RequirementList reqs, String fp, String id){
+    public parseDoc(RequirementList reqs, String fp, String id, ArrayList<String> keywords){
         setList(reqs);
         setFilePath(fp);
         setIdentifier(id);
         setDocument(new HashMap<>());
+        setKeywords(keywords);
         read();
     }
 }

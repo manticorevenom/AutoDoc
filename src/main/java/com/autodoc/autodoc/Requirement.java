@@ -10,7 +10,6 @@
 package com.autodoc.autodoc;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 // My thinking is that a
 // requirement will have a tag
@@ -169,12 +168,7 @@ class Requirement {
      */
     public boolean compareRequirement(Requirement req){
         // if tags are equal and headers are equal
-        if(tag.toLowerCase() == req.getTag().toLowerCase() && this.compareHeaders(req.getHeaders())){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return tag.toLowerCase() == req.getTag().toLowerCase() && this.compareHeaders(req.getHeaders());
     }
     // CONSTRUCTORS ----------------------
     /**

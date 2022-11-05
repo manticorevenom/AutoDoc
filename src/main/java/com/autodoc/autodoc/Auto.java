@@ -13,6 +13,8 @@
 package com.autodoc.autodoc;
 
 
+import java.util.ArrayList;
+
 class Auto {
     private parseDoc document;
     private parseCode code;
@@ -42,8 +44,8 @@ class Auto {
         document = new parseDoc();
         code = new parseCode();
     }
-    public Auto(String dFP, String dID, String cFP, String cID){
-        document = new parseDoc(new RequirementList(), dFP, dID);
+    public Auto(String dFP, String dID, String cFP, String cID, ArrayList<String> keywords){
+        document = new parseDoc(new RequirementList(), dFP, dID, keywords);
         code = new parseCode(new RequirementList(), cFP, cID);
     }
 }
