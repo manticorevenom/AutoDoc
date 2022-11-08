@@ -46,6 +46,6 @@ class Auto {
     }
     public Auto(String dFP, String dID, String cFP, String cID, ArrayList<String> keywords){
         document = new parseDoc(new RequirementList(), dFP, dID, keywords);
-        code = new parseCode(new RequirementList(), cFP, cID);
+        code = new parseCode(new RequirementList(), cFP, cID, keywords);
     }
 }

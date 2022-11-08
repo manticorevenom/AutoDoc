@@ -9,6 +9,9 @@
  */
 package com.autodoc.autodoc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 // thinking of turning the code into a hashmap
 // this would allow us to update stuff easier
 class parseCode implements Parse {
@@ -26,8 +29,13 @@ class parseCode implements Parse {
      */
     public String identifier;
     /**
-     * Dictionary
+     * Dictionary for storing the document
      */
+    public HashMap<Integer, String> code;
+    /**
+     * Keywords
+     */
+    public static ArrayList<String> keywords;
     // SETTERS ---------------------------
 
     /**
@@ -53,6 +61,19 @@ class parseCode implements Parse {
     public void setIdentifier(String id) {
         identifier = id;
     }
+    /**
+     * setCode
+     * @param code - dictionary for the document
+     */
+    public void setCode(HashMap<Integer, String> code){
+        this.code = code;
+    }
+    /**
+     * setKeywords
+     * @param keywords - keyword list
+     */
+    public void setKeywords(ArrayList<String> keywords){
+        parseDoc.keywords = keywords;}
     // GETTERS ---------------------------
 
     /**
@@ -77,6 +98,21 @@ class parseCode implements Parse {
      */
     public String getIdentifier() {
         return identifier;
+    }
+    /**
+     * getCode
+     * @return - returns the dictionary of the document
+     */
+    public HashMap<Integer, String> getCode(){
+        return code;
+    }
+
+    /**
+     * getKeywords
+     * @return - list of keywords
+     */
+    public static ArrayList<String> getKeywords() {
+        return keywords;
     }
     // METHODS ---------------------------
     /**
@@ -111,10 +147,12 @@ class parseCode implements Parse {
      * @param fp - file path for parse code
      * @param id - identifier for searching
      */
-    public parseCode(RequirementList reqs, String fp, String id){
+    public parseCode(RequirementList reqs, String fp, String id, ArrayList<String> keywords){
         setList(reqs);
         setFilePath(fp);
         setIdentifier(id);
+        setCode(new HashMap<>());
+        setKeywords(keywords);
         read();
     }
 }
