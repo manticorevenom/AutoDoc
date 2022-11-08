@@ -126,15 +126,19 @@ class parseDoc implements Parse {
      * This method will parse the document
      * looking for the document tag
      * and then pulling the code headers
+     * this method is CANCER
      */
     public void read(){
 
-        // FIRST HASHMAP
-        // then calculate difference of line between tags
+        // create a requirements list
         ArrayList<Requirement> reqs = new ArrayList<>();
 
+        // create a buffered reader to parse the document
         BufferedReader reader;
+
+        // line count will be used as the key for the hashMap
         int lineCount = 0;
+        // try to parse
         try {
             reader = new BufferedReader(new FileReader(filePath));
 
@@ -146,12 +150,14 @@ class parseDoc implements Parse {
             // close reader
             reader.close();
         }
+        // catch any exception that occurs while parsing
         catch(Exception ex){
             System.out.println("Error in parsing the document: " + ex.getMessage());
         }
-        System.out.println(document.toString());
+        // test print
+        // System.out.println(document.toString());
 
-        //relative line with identifier
+        // relative line with identifier
         int first = 0;
         // relative second line with identifier
         int second = 0;
@@ -159,29 +165,39 @@ class parseDoc implements Parse {
         for( int line = 0; line < document.size(); line++){
             // if a line contains the identifier
             // look to the next identifier
-            if (document.get(line).equals(identifier)){
+            if (document.get(line).contains(identifier)){
+                // if the first is not set
                 if( first == 0 ) {
                     first = line;
                 }
+                // otherwise set the second
                 else if( second == 0 ){
                     second = line;
                 }
             }
+            // near end of document
+            else if( line == document.size() - 1){
+                second = document.size() - 1;
+            }
 
             // if first and second are set
-            if(!(first == 0 && second == 0)){
-                for( int difference = first; difference < second; difference++){
-                    // get values for requirement
-                    String tag = null, context = null;
-                    ArrayList<String> headers = new ArrayList<>();
+            // get values for requirement
+            String tag = null, context = "";
+            ArrayList<String> headers = new ArrayList<>();
 
+            if(!(first == 0 || second == 0)){
+                // for each line in between the first and second
+                for( int difference = first; difference < second; difference++){
                     // if the line contains the identifier
                     if(document.get(difference).contains(identifier)) {
                         // grab the line and split
-                        String[] values = document.get(difference).split(" ");
-                        tag = values[1];
-                        for (int lines = 2; lines < values.length; lines++) {
-                            context += values[lines];
+                        // don't ask
+                        String[] values = document.get(difference).split("\\s+");
+
+                        tag = values[2];
+
+                        for (int lines = 3; lines < values.length; lines++) {
+                            context += values[lines] + " ";
                         }
                     }
                     // otherwise it does not have an identifier
@@ -192,10 +208,6 @@ class parseDoc implements Parse {
                             if(document.get(difference).contains(keyword)){
                                 headers.add(document.get(difference));
                             }
-                            // if it doesn't it is apart of the context
-                            else{
-                                context += document.get(difference);
-                            }
                         }
                     }
                 }
@@ -204,8 +216,21 @@ class parseDoc implements Parse {
                 // default the second value
                 second = 0;
 
+                // a check to make sure that the tag is some kind of word
+                // and not empty
+                // if it passes the check
+                // add the requirement to the list
+                if( tag != null ) {
+                    if (tag.length() > 2){
+                        reqs.add(new Requirement(tag, headers, context, line));
+                    }
+                }
+
             }
         }
+        // let see what happens
+        System.out.println(reqs);
+        // sort of works but I'm not happy with it
     }
     // CONSTRUCTORS ----------------------
 
@@ -217,7 +242,7 @@ class parseDoc implements Parse {
         filePath = "example/Library/docs/srs.txt";
         identifier = "SFREQ";
         document = new HashMap<>();
-        String[] words = {"public", "private", "interface", "protected", "class"};
+        String[] words = {"public", "private", "protected", "class"};
         keywords = new ArrayList<>(List.of(words));
         read();
     }

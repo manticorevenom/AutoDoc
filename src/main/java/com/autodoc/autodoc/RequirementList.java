@@ -94,6 +94,19 @@ class RequirementList {
             return false;
         }
     }
+
+    /**
+     * toString override
+     * @return string form of the requirement list
+     */
+    @Override
+    public String toString(){
+        String requirements = null;
+        for (Requirement requirement : requirementList){
+            requirements += requirement + "\n";
+        }
+        return requirements;
+    }
     // CONSTRUCTORS ----------------------
     /**
      * Default no parameter Constructor

@@ -170,6 +170,22 @@ class Requirement {
         // if tags are equal and headers are equal
         return tag.toLowerCase() == req.getTag().toLowerCase() && this.compareHeaders(req.getHeaders());
     }
+
+    /**
+     * override toString()
+     * @return string form of the requirement
+     */
+    @Override
+    public String toString(){
+        String requirement = "";
+        requirement += tag + " ";
+        for( String header : headers ){
+            requirement += header + " ";
+        }
+        requirement += context + " ";
+        requirement += line;
+        return requirement;
+    }
     // CONSTRUCTORS ----------------------
     /**
      * Defaulted no parameter constructor
