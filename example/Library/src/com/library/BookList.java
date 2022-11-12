@@ -227,7 +227,7 @@ public class BookList {
     }
 
     /**
-     *
+     * <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
      * @return new book
      */
     private Book askForInfo(){
@@ -255,7 +255,7 @@ public class BookList {
     }
 
     /**
-     *
+     * <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
      * @param field
      * @return new string
      */
@@ -275,7 +275,7 @@ public class BookList {
     }
 
     /**
-     *
+     * <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
      * @param field
      * @return new int
      */
@@ -295,7 +295,7 @@ public class BookList {
     }
 
     /**
-     *
+     * <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
      * @return LocalDate for the publish date
      */
     private LocalDate getDate(){

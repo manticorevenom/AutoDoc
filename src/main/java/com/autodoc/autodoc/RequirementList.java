@@ -43,7 +43,15 @@ class RequirementList {
      * @return boolean depending on found
      */
     public boolean searchRequirement(Requirement search){
-        return requirementList.contains(search);
+        Requirement contain =  requirementList.stream().filter(requirement -> search.compareRequirement(requirement))
+                .findAny()
+                .orElse(null);
+        if(contain == null){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
     /**
      * adds a requirement to requirements list
@@ -101,7 +109,7 @@ class RequirementList {
      */
     @Override
     public String toString(){
-        String requirements = null;
+        String requirements = "";
         for (Requirement requirement : requirementList){
             requirements += requirement + "\n";
         }

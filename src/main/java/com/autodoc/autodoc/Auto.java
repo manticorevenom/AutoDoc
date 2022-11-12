@@ -39,6 +39,7 @@ class Auto {
         // if there is a conflict
         // we ask how they want to resolve it
         // then we update the document or code
+
     }
     public Auto(){
         document = new parseDoc();

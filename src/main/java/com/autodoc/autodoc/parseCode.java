@@ -9,8 +9,13 @@
  */
 package com.autodoc.autodoc;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // thinking of turning the code into a hashmap
 // this would allow us to update stuff easier
@@ -121,13 +126,117 @@ class parseCode implements Parse {
      * and then pulling the code headers
      */
     public void read(){
-        // reads line by line
-        // looks for the <identifier>
-        // grabs everything till </identifier>
-        // Splits on the ::
-        // if the line contains private/public/class/protected in the string with the ()
-        // loop over the list of reqs and add header if it is not already there
-        // might use a regex,
+        // create a buffered reader to parse the document
+        BufferedReader reader;
+
+        // line count will be used as the key for the hashMap
+        int lineCount = 0;
+        // try to parse
+        try {
+            reader = new BufferedReader(new FileReader(filePath));
+
+            // grab each line and convert code into hash map
+            for( String line : reader.lines().toList()){
+                code.put(lineCount, line);
+                lineCount++;
+            }
+            // close reader
+            reader.close();
+        }
+        // catch any exception that occurs while parsing
+        catch(Exception ex){
+            System.out.println("Error in parsing the code: " + ex.getMessage());
+        }
+
+        // now try to parse requirements
+        this.parseRequirements();
+    }
+    /**
+     *
+     */
+    private void parseRequirements(){
+        // create a requirements list
+        RequirementList reqs = new RequirementList();
+        Requirement req = new Requirement();
+
+        // relative line with identifier
+        int first = 0;
+        // relative second line with identifier
+        int second = 0;
+
+        // now try to parse the requirements
+        for( int line = 0; line < code.size(); line++){
+            // if a line contains the identifier
+            // look to the next identifier
+            if (code.get(line).contains(identifier)){
+                // if the first is not set
+                if( first == 0 ) {
+                    first = line;
+                }
+                // otherwise set the second
+                else if( second == 0 ){
+                    second = line;
+                }
+            }
+            // near end of document
+            else if( line == code.size() - 1){
+                second = code.size() - 1;
+            }
+
+            // if first and second are set
+            // get values for requirement
+
+            if(!(first == 0 || second == 0)){
+                // for each line in between the first and second
+                for( int difference = first; difference < second; difference++){
+                    String[] tags = null;
+                    // if the line contains the identifier
+                    if(code.get(difference).contains(identifier)) {
+                        // grab the line and split
+                        // get the regex
+                        Pattern p = Pattern.compile("<" + identifier+ ">(.+?)</" + identifier + ">", Pattern.DOTALL);
+                        Matcher m = p.matcher(code.get(difference));
+                        m.find();
+
+                        // get the requirement tags
+                        tags = m.group(1).split("::");
+                    }
+                    // otherwise it does not have an identifier
+                    else{
+                        // we loop over our keywords
+                        for(String keyword : keywords){
+                            // if it has a keyword it is a header
+                            if(code.get(difference).contains(keyword)){
+                                // get rid of { and ;
+                                req.addHeader(code.get(difference).replace("{", "").replace(";", "").trim());
+                            }
+                        }
+                    }
+                    // loop over the values and add the requirements
+                    if( tags != null) {
+                        for (String t : tags) {
+                            Requirement temp = new Requirement(t, req.getHeaders(), "No context", line);
+                            reqs.addRequirement(temp);
+                        }
+                    }
+                }
+                // clear out previous headers
+                req = new Requirement();
+                // set requirement to next requirement
+                first = second;
+                // default the second value
+                second = 0;
+
+                // a check to make sure that the tag is some kind of word
+                // and not empty
+                // if it passes the check
+                // add the requirement to the list
+            }
+        }
+        // let see what happens
+        // System.out.println(reqs);
+        // sort of works but I'm not happy with it
+        setList(reqs);
     }
     // CONSTRUCTORS ----------------------
 
@@ -138,6 +247,9 @@ class parseCode implements Parse {
         list = new RequirementList();
         filePath = "example/Library/src/com/library/BookList.java";
         identifier = "FREQ";
+        code = new HashMap<>();
+        String[] words = {"public", "private", "protected", "class"};
+        keywords = new ArrayList<>(List.of(words));
         read();
     }
 

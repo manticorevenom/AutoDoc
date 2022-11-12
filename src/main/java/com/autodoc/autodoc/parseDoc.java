@@ -16,13 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-// thinking of turning the document into a hashmap
-// this would allow us to update stuff easier
 class parseDoc implements Parse {
     // VARIABLES -------------------------
-
-    // idea is the line would be an int and the string would be contents of a line
-    //private Dictionary<Integer, String> doc;
     /**
      * Requirements list
      */
@@ -44,7 +39,6 @@ class parseDoc implements Parse {
      */
     public static ArrayList<String> keywords;
     // SETTERS ---------------------------
-
     /**
      * setList
      * @param l - requirements list
@@ -82,7 +76,6 @@ class parseDoc implements Parse {
     public void setKeywords(ArrayList<String> keywords){
         parseDoc.keywords = keywords;}
     // GETTERS ---------------------------
-
     /**
      * getList
      * @return list of requirements
@@ -124,15 +117,9 @@ class parseDoc implements Parse {
     // METHODS ---------------------------
     /**
      * This method will parse the document
-     * looking for the document tag
-     * and then pulling the code headers
-     * this method is CANCER
+     * into a hashMap
      */
     public void read(){
-
-        // create a requirements list
-        ArrayList<Requirement> reqs = new ArrayList<>();
-
         // create a buffered reader to parse the document
         BufferedReader reader;
 
@@ -154,13 +141,28 @@ class parseDoc implements Parse {
         catch(Exception ex){
             System.out.println("Error in parsing the document: " + ex.getMessage());
         }
-        // test print
-        // System.out.println(document.toString());
+
+        // now try to parse requirements
+        this.parseRequirements();
+    }
+    /**
+     * This method parses the hashMap for requirements
+     * It probably isn't the greatest
+     */
+    private void parseRequirements(){
+        // create a requirements list
+        RequirementList list = new RequirementList();
+        Requirement requirement = new Requirement();
+
+        // requirement fields
+        String tag = null, context = null;
+        ArrayList<String> headers = new ArrayList<>();
 
         // relative line with identifier
         int first = 0;
         // relative second line with identifier
         int second = 0;
+
         // now try to parse the requirements
         for( int line = 0; line < document.size(); line++){
             // if a line contains the identifier
@@ -182,8 +184,9 @@ class parseDoc implements Parse {
 
             // if first and second are set
             // get values for requirement
-            String tag = null, context = "";
-            ArrayList<String> headers = new ArrayList<>();
+            tag = "";
+            context = "";
+            headers = new ArrayList<>();
 
             if(!(first == 0 || second == 0)){
                 // for each line in between the first and second
@@ -206,7 +209,7 @@ class parseDoc implements Parse {
                         for(String keyword : keywords){
                             // if it has a keyword it is a header
                             if(document.get(difference).contains(keyword)){
-                                headers.add(document.get(difference));
+                                headers.add(document.get(difference).trim());
                             }
                         }
                     }
@@ -222,15 +225,16 @@ class parseDoc implements Parse {
                 // add the requirement to the list
                 if( tag != null ) {
                     if (tag.length() > 2){
-                        reqs.add(new Requirement(tag, headers, context, line));
+                        list.addRequirement(new Requirement(tag, headers, context, line));
                     }
                 }
 
             }
         }
         // let see what happens
-        System.out.println(reqs);
+        //System.out.println(list);
         // sort of works but I'm not happy with it
+        setList(list);
     }
     // CONSTRUCTORS ----------------------
 

@@ -205,6 +205,7 @@ class Requirement {
      */
     public Requirement(String tag, ArrayList<String> headers, String context, int line){
         setTag(tag);
+
         setHeaders(headers);
         setContext(context);
         setLine(line);
