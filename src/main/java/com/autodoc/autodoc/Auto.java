@@ -41,14 +41,14 @@ class Auto {
         // check for any missing requirements from the code
         for(Requirement r : document.getList().getRequirementList()){
             // if the requirement is not in the list
-            if(!code.getList().searchRequirement(r)){
+            if(!code.getList().searchTag(r)){
                 conflicts.add(new Conflict(r, new Requirement(), "Code does not have requirement."));
             }
         }
 
         // check for any missing requirements from the document
         for(Requirement r : code.getList().getRequirementList()){
-            if(!document.getList().searchRequirement(r)){
+            if(!document.getList().searchTag(r)){
                 conflicts.add(new Conflict(new Requirement(), r,"Document does not have requirement."));
             }
         }
@@ -56,9 +56,24 @@ class Auto {
 
     /**
      * This method checks to make sure
+     * each requirement that is in
+     * either list is equivalent to
+     * the same requirement in the other
+     * list
      */
     private void checkForDissimilar(){
-
+        // check each requirement in document against corresponding equivalent in code list
+        // if it exists
+        for(Requirement r : document.getList().getRequirementList()){
+            // if requirement is in the list
+            if(code.getList().searchTag(r)){
+                // and the requirements are not equivalent
+                // create a new conflict
+                if(!r.compareRequirement(code.getList().getRequirementByTag(r.getTag()))){
+                    conflicts.add(new Conflict(r, code.getList().getRequirementByTag(r.getTag()), "Requirements are not equivalent."));
+                }
+            }
+        }
     }
 
     public void check(){
@@ -72,6 +87,9 @@ class Auto {
         // we ask how they want to resolve it
         // then we update the document or code
         checkForMissing();
+        checkForDissimilar();
+        //System.out.println(document.getList().toString());
+        //System.out.println(code.getList().toString());
 
     }
 

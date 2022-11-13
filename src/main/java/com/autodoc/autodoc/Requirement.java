@@ -162,6 +162,10 @@ class Requirement {
                 }
             }
         }
+        // otherwise they are not equal
+        else{
+            return false;
+        }
         // return true
         return true;
     }
@@ -210,7 +214,6 @@ class Requirement {
      */
     public Requirement(String tag, ArrayList<String> headers, String context, int line){
         setTag(tag);
-
         setHeaders(headers);
         setContext(context);
         setLine(line);
