@@ -104,6 +104,11 @@ class Requirement {
         return line;
     }
     // METHODS ---------------------------
+    public boolean compareTag(String tag){
+        return this.tag.replace(" ", "").toLowerCase().trim().equals(
+                tag.replace(" ", "").toLowerCase().trim()
+        );
+    }
     /**
      * adds a header to the header list
      * @param header - header to add to the list
@@ -149,9 +154,9 @@ class Requirement {
         // if they are the same size
         // and each item in one list is in the other
         if( this.headers.size() == headers.size()) {
-            for (String s : this.headers) {
+            for (String s : headers) {
                 // if any of the items are not in the list
-                if (!headers.contains(s)) {
+                if (!this.searchHeader(s)) {
                     // return false
                     return false;
                 }
@@ -168,7 +173,7 @@ class Requirement {
      */
     public boolean compareRequirement(Requirement req){
         // if tags are equal and headers are equal
-        return tag.toLowerCase() == req.getTag().toLowerCase() && this.compareHeaders(req.getHeaders());
+        return tag.toLowerCase().trim().equals(req.getTag().toLowerCase().trim()) && this.compareHeaders(req.getHeaders());
     }
 
     /**

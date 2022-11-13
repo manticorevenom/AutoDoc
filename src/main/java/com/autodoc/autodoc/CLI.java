@@ -57,13 +57,13 @@ class CLI {
                     case def:
                         continue;
                     case check:
-                        // program.check();
+                        program.check();
                         break;
                     case update:
                         // program.update();
                         break;
                     case printConflicts:
-                        // program.conflicts();
+                        program.printConflicts();
                         break;
                     case printReqs:
                         // program.print();

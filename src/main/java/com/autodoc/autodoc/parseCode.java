@@ -185,11 +185,12 @@ class parseCode implements Parse {
 
             // if first and second are set
             // get values for requirement
+            String[] multipleTags = null;
+            ArrayList<String> tags = new ArrayList<>();
 
             if(!(first == 0 || second == 0)){
                 // for each line in between the first and second
                 for( int difference = first; difference < second; difference++){
-                    String[] tags = null;
                     // if the line contains the identifier
                     if(code.get(difference).contains(identifier)) {
                         // grab the line and split
@@ -199,7 +200,13 @@ class parseCode implements Parse {
                         m.find();
 
                         // get the requirement tags
-                        tags = m.group(1).split("::");
+                        if(m.group(1).contains("::")){
+                            multipleTags = m.group(1).split("::");
+                            tags = new ArrayList<>(List.of(multipleTags));
+                        }
+                        else{
+                            tags.add(m.group(1));
+                        }
                     }
                     // otherwise it does not have an identifier
                     else{
@@ -208,17 +215,15 @@ class parseCode implements Parse {
                             // if it has a keyword it is a header
                             if(code.get(difference).contains(keyword)){
                                 // get rid of { and ;
+                                //System.out.println(code.get(difference).replace("{", "").replace(";", "").trim());
                                 req.addHeader(code.get(difference).replace("{", "").replace(";", "").trim());
                             }
                         }
                     }
-                    // loop over the values and add the requirements
-                    if( tags != null) {
-                        for (String t : tags) {
-                            Requirement temp = new Requirement(t, req.getHeaders(), "No context", line);
-                            reqs.addRequirement(temp);
-                        }
-                    }
+                }
+                for(String tag : tags){
+                    Requirement temp = new Requirement(tag, req.getHeaders(), "No context", line);
+                    reqs.addRequirement(temp);
                 }
                 // clear out previous headers
                 req = new Requirement();

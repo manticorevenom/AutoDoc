@@ -174,7 +174,7 @@
                 public void addCopy()
                 private boolean search()
             SFREQ BookList.Print - The application shall be able to print in various formats.
-                private boolean print()
+                public void print()
             SFREQ BookList.ProcessCheckout - The application shall process checkouts.
                 public void processCheckout()
                 private boolean search()

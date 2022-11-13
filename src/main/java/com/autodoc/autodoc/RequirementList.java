@@ -53,12 +53,53 @@ class RequirementList {
             return true;
         }
     }
+
+    /**
+     * Searches for the tag
+     * of a requirement
+     * @param search - requirement we are searching for
+     * @return boolean depending on found
+     */
+    public boolean searchTag(Requirement search){
+        Requirement contain =  requirementList.stream().filter(requirement -> search.compareTag(requirement.getTag()))
+                .findAny()
+                .orElse(null);
+        if(contain == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Returns a requirement in the list if
+     * a tag is matched
+     * @param tag
+     * @return
+     */
+    public Requirement getRequirementByTag(String tag){
+        return  requirementList.stream().filter(requirement -> requirement.compareTag(tag))
+                .findAny()
+                .orElse(null);
+    }
     /**
      * adds a requirement to requirements list
      * @param add - requirement to add
      */
     public void addRequirement(Requirement add){
-        if(!this.searchRequirement(add)){
+        // if there is a tag
+        // we just need to merge headers
+        if(this.searchTag(add)){
+            // for each header for add
+            for(String header : add.getHeaders()){
+                // merge the headers if needed
+                this.getRequirementByTag(add.getTag()).addHeader(header);
+            }
+        }
+        // else there is not a tag
+        // and it is not in the list
+        else if(!this.searchRequirement(add)){
             requirementList.add(add);
         }
         else{
