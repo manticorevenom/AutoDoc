@@ -18,6 +18,4 @@ Click resolve conflicts.
 This tool requires source code and documents to be formatted. See format specifications.
 
 # Format Specifications
-A identifier is used to locate items for tracking.
-
-Tags are also used for keep tacking track of 
+See the FormattingSpecs.md in /docs directory.
