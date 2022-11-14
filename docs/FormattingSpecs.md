@@ -19,7 +19,7 @@ Requirement.
 The identifier must be followed by the tag for the item. Tags should be unique meaning that they
 will not be re-used.
 
-For example, one of our tags for a requirement is ```BookList.Add```.
+For example, one of our tags for an item is ```BookList.Add```.
 
 Items should also have some context following the tag, this is a recommendation and not a requirement.
 Not having context for items should not impact the functionality of the program.
@@ -47,8 +47,69 @@ SFREQ BookList.Add - The application shall be able to add a book to the inventor
 ```
 # Code Format Specifications
 The code must have an identifier for tracking items. The identifier is user-specified.
-We recommend that this identifier is unique such that it should not appear in the document
+We recommend that this identifier is unique such that it should not appear in the code
 except for tracking purposes.
 
 For example, we use ```<FREQ>``` as our identifier in our code examples. This stands for Functional
-Requirement.
+Requirement. Our identifier also has an end tag, which is ```</FREQ>``` in our examples. 
+
+Tags should be between the identifier and the end tag for the identifier, these tags should be the same as
+the tags used in the document. For example, ```BookList.Add``` is the tag in the document but is also the tag in the
+code.
+
+Here is an example,
+```
+/**
+* <FREQ>BookList.Add</FREQ>
+*/
+```
+
+Identifiers with tags should be located in comments, and should be placed above each line of code
+where applicable.
+
+For example, the above comment would be placed above the ```public void add()``` method.
+
+Some lines of code may correspond to more than one item, just like in the document. To support this,
+multiple tags can be used between the identifiers.
+
+An example of this,
+```
+/**
+* <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
+* @param field
+* @return new string
+*/
+```
+
+Each tag should be separated by a double colon, ```::```.
+
+Each line of code that corresponds to an item should be marked with the tag used in the document. 
+This allows the program to track items correctly. 
+
+Here is the formal code specification,
+
+<b>Single Tag</b>:
+```
+/**
+* <Identifier><Tag></Identifier>
+*/
+<Some Line of Code>
+```
+An example,
+```
+/**
+* <FREQ>BookList</FREQ>
+*/
+private ArrayList<Book> inventory;
+```
+Another Example,
+```
+/**
+* <FREQ>BookList.Add</FREQ>
+*/
+public void add(){
+```
+<b>Multiple Tags</b>:
+
+
+
