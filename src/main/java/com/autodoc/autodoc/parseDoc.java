@@ -243,7 +243,7 @@ class parseDoc implements Parse {
      */
     public parseDoc(){
         list = new RequirementList();
-        filePath = "example/Library/docs/srs.txt";
+        filePath = "examples/Library/docs/srs.txt";
         identifier = "SFREQ";
         document = new HashMap<>();
         String[] words = {"public", "private", "protected", "class"};

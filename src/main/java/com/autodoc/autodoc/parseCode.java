@@ -250,7 +250,7 @@ class parseCode implements Parse {
      */
     public parseCode(){
         list = new RequirementList();
-        filePath = "example/Library/src/com/library/BookList.java";
+        filePath = "examples/Library/src/com/library/BookList.java";
         identifier = "FREQ";
         code = new HashMap<>();
         String[] words = {"public", "private", "protected", "class"};
