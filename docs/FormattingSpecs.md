@@ -110,6 +110,30 @@ Another Example,
 public void add(){
 ```
 <b>Multiple Tags</b>:
+```
+/**
+* <Identifier><TAG_1>::<TAG_2>::<TAG_N></Identifier>
+*/
+<Some Line of Code>
+```
+An example,
+```
+/**
+* <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
+* @return new book
+*/
+private Book askForInfo(){
+```
+Another example,
+```
+/**
+* <FREQ>BookList.Add::BookList.AddCopy::BookList.ProcessCheckout::BookList.ProcessReturn::BookList.Delete::BookList.DeleteCopy</FREQ>
+* @return LocalDate for the publish date
+*/
+private LocalDate getDate(){
+```
 
+```NOTE:``` All of the examples used in this document are from the Library example found in 
+the /examples directory.
 
 
