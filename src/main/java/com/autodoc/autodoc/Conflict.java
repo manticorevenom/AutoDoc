@@ -77,13 +77,24 @@ public class Conflict {
     }
 
     /**
+     * compare
+     * @param conflict - conflict for comparison
+     * @return - boolean depending on result
+     */
+    public boolean compare(Conflict conflict){
+        return this.docReq.compareTag(conflict.getDocReq().getTag())
+                && this.codeReq.compareTag(conflict.getCodeReq().getTag())
+                && this.context.equals(conflict.getContext());
+    }
+    /**
      * toString
      * @return string for conflicts
      */
     @Override
     public String toString(){
-        return context + " Code Requirement: " + codeReq + " Document Requirement: " + docReq;
+        return context + "\n" + "\tDocument Requirement:\n" + "\t\t" + docReq + "\n" + "\tCode Requirement:\n" + "\t\t" + codeReq;
     }
+
     // CONSTRUCTORS -------------------------
 
     /**

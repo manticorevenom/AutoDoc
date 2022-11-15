@@ -171,6 +171,13 @@ class Requirement {
     }
 
     /**
+     * clear out the headers
+     * for a requirement
+     */
+    public void clearHeaders(){
+        headers = new ArrayList<>();
+    }
+    /**
      * compares requirements
      * @param req - requirement to compare
      * @return boolean depending on if they are equivalent or not
@@ -193,6 +200,18 @@ class Requirement {
         }
         requirement += context + " ";
         requirement += line;
+        return requirement;
+    }
+    /**
+     * print
+     */
+    public String print(int spaces){
+        String requirement = "";
+        requirement += tag + " ";
+        requirement += context + "\n";
+        for (String header : headers){
+            requirement += " ".repeat(spaces) + header + "\n";
+        }
         return requirement;
     }
     // CONSTRUCTORS ----------------------

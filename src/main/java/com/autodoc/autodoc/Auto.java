@@ -41,15 +41,20 @@ class Auto {
         // check for any missing requirements from the code
         for(Requirement r : document.getList().getRequirementList()){
             // if the requirement is not in the list
-            if(!code.getList().searchTag(r)){
-                conflicts.add(new Conflict(r, new Requirement(), "Code does not have requirement."));
+            // and the conflict is not already in the list
+            if(!code.getList().searchTag(r) && !conflicts.stream()
+                    .filter(conflict -> conflict.compare(new Conflict(r, new Requirement(), "Code does not have requirement."))).findAny().isPresent()) {
+                        conflicts.add(new Conflict(r, new Requirement(), "Code does not have requirement."));
             }
         }
 
         // check for any missing requirements from the document
         for(Requirement r : code.getList().getRequirementList()){
-            if(!document.getList().searchTag(r)){
-                conflicts.add(new Conflict(new Requirement(), r,"Document does not have requirement."));
+            // if the requirement is not in the list
+            // and the conflict is not already in the list
+            if(!document.getList().searchTag(r) && !conflicts.stream()
+                    .filter(conflict -> conflict.compare(new Conflict(new Requirement(), r, "Document does not have requirement."))).findAny().isPresent()){
+                conflicts.add(new Conflict(new Requirement(), r, "Document does not have requirement."));
             }
         }
     }
@@ -68,9 +73,11 @@ class Auto {
             // if requirement is in the list
             if(code.getList().searchTag(r)){
                 // and the requirements are not equivalent
-                // create a new conflict
+                // create a new conflict if it does not already exist
                 if(!r.compareRequirement(code.getList().getRequirementByTag(r.getTag()))){
-                    conflicts.add(new Conflict(r, code.getList().getRequirementByTag(r.getTag()), "Requirements are not equivalent."));
+                    if(!conflicts.contains(new Conflict(r, code.getList().getRequirementByTag(r.getTag()), "Requirements are not equivalent."))) {
+                        conflicts.add(new Conflict(r, code.getList().getRequirementByTag(r.getTag()), "Requirements are not equivalent."));
+                    }
                 }
             }
         }
@@ -94,6 +101,61 @@ class Auto {
     }
 
     /**
+     * update
+     * this method will automatically
+     * update the document or the code
+     * based on user input
+     * right now it will do document only
+     */
+    public void update(){
+        // looks at conflicts
+        // if the conflict is in document
+        // update the requirements and update the document
+        // then write the document
+        updateDocumentToFitCode();
+        document.updateDocument();
+        document.writeDoc();
+
+    }
+
+    /**
+     * Automatically updates all document
+     * requirements to fit the code requirements
+     */
+    public void updateDocumentToFitCode(){
+        RequirementList list = document.getList();
+        // go through the conflicts and resolve the conflicts
+        ArrayList<Conflict> resolved = new ArrayList<>();
+        for(Conflict conflict : conflicts){
+            // if the requirements are not equivalent
+            if(conflict.getContext().equals("Requirements are not equivalent.")){
+                // clear out the document headers
+                document.getList().getRequirementByTag(conflict.getDocReq().getTag()).clearHeaders();
+                // add the code req headers to the document requirement
+                for( String header : conflict.getCodeReq().getHeaders()){
+                    document.getList().getRequirementByTag(conflict.getDocReq().getTag()).addHeader(header);
+                }
+                // conflict is resolved
+                // remove conflict
+                resolved.add(conflict);
+            }
+            // if the document does not have a requirement
+            else if(conflict.getContext().equals("Document does not have requirement.")){
+                // add the code requirement to the document
+                document.getList().addRequirement(code.getList().getRequirementByTag(conflict.getCodeReq().getTag()));
+                // conflict is resolved
+                // remove conflict
+                resolved.add(conflict);
+            }
+            // else ignore it for now
+        }
+        // loop over resolved list and remove from conflicts
+        for(Conflict resolution : resolved){
+            conflicts.remove(resolution);
+        }
+    }
+
+    /**
      * printConflicts
      * prints the list of conflicts if any
      */
@@ -106,6 +168,13 @@ class Auto {
         else{
             System.out.println("No conflicts found.");
         }
+    }
+    /**
+     * printReqs
+     */
+    public void printReqs(){
+        System.out.println(document.getList().toString());
+        System.out.println(code.getList().toString());
     }
 
     /**

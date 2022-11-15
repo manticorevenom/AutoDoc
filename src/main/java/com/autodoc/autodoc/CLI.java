@@ -60,13 +60,13 @@ class CLI {
                         program.check();
                         break;
                     case update:
-                        // program.update();
+                        program.update();
                         break;
                     case printConflicts:
                         program.printConflicts();
                         break;
                     case printReqs:
-                        // program.print();
+                        program.printReqs();
                         break;
                     case addReq:
                         // program.add();;

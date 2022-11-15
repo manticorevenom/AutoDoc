@@ -11,9 +11,12 @@ package com.autodoc.autodoc;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 class parseDoc implements Parse {
@@ -162,6 +165,7 @@ class parseDoc implements Parse {
         int first = 0;
         // relative second line with identifier
         int second = 0;
+        int offest = 0;
 
         // now try to parse the requirements
         for( int line = 0; line < document.size(); line++){
@@ -214,20 +218,20 @@ class parseDoc implements Parse {
                         }
                     }
                 }
-                // set requirement to next requirement
-                first = second;
-                // default the second value
-                second = 0;
-
                 // a check to make sure that the tag is some kind of word
                 // and not empty
                 // if it passes the check
                 // add the requirement to the list
                 if( tag != null ) {
                     if (tag.length() > 2){
-                        list.addRequirement(new Requirement(tag, headers, context, line));
+                        list.addRequirement(new Requirement(tag, headers, context, line - (second - first) + 1));
                     }
                 }
+
+                // set requirement to next requirement
+                first = second;
+                // default the second value
+                second = 0;
 
             }
         }
@@ -235,6 +239,72 @@ class parseDoc implements Parse {
         //System.out.println(list);
         // sort of works but I'm not happy with it
         setList(list);
+    }
+    /**
+     * updateDocument
+     * this will handle updating
+     * the requirements in the actual
+     * hashMap
+     */
+    public void updateDocument(){
+        // for each requirement in the requirement list
+        for (Requirement requirement : list.getRequirementList()){
+            // replace whatever was there before and update it with
+            // our updated requirement
+
+            // some regex
+            int spaces = 0;
+            char[] line = document.get(requirement.getLine() - 1).toCharArray();
+
+            for(int chars = 0; chars < line.length; chars++){
+                if(line[chars] == ' '){
+                    spaces++;
+                }
+                else if(line[chars] != ' '){
+                    break;
+                }
+            }
+
+            System.out.println(spaces);
+            // remove previous entry
+            // remove everything up to the next req
+            for(int lines = requirement.getLine(); lines < requirement.getLine() + requirement.getHeaders().size(); lines++){
+                document.replace(lines, "");
+            }
+            document.put(requirement.getLine() - 1, " ".repeat(spaces) + identifier + " " + requirement.print(spaces + 4));
+        }
+    }
+    public void writeDoc(){
+        // Try block to check if exception occurs
+        String text  = "";
+        for(int line = 0; line < document.size(); line++){
+            text = text + document.get(line) + "\n";
+        }
+        try {
+
+            // Create a FileWriter object
+            // to write in the file
+            FileWriter fWriter = new FileWriter("src/srs.txt");
+
+            // Writing into file
+            // Note: The content taken above inside the
+            // string
+            fWriter.write(text);
+            // Closing the file writing connection
+            fWriter.close();
+
+            // Display message for successful execution of
+            // program on the console
+            System.out.println(
+                    "File is created successfully with the content.");
+        }
+
+        // Catch block to handle if exception occurs
+        catch (Exception e) {
+
+            // Print the exception
+            System.out.print(e.getMessage());
+        }
     }
     // CONSTRUCTORS ----------------------
 
