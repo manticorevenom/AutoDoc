@@ -23,6 +23,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.stage.FileChooser;
 
 
@@ -34,6 +37,15 @@ import javafx.stage.FileChooser;
 public class AutoDocApplication extends Application{
     Stage window;
     Scene startScene, mainScene;
+
+    Label code_file_label;
+    Label doc_file_label;
+
+    public static ArrayList<String> keywords;
+
+    String code_path, doc_path, doc_name;
+
+    Auto auto;
 
     public static void main(String[] args) {
         launch();
@@ -70,7 +82,20 @@ public class AutoDocApplication extends Application{
         var go_button = new Button("Go to Main Menu");
         go_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {window.setScene(mainScene);}
+            public void handle(ActionEvent actionEvent) {
+
+
+                if (code_path != null && doc_path != null){
+                    String[] words = {"public", "private", "protected", "class"};
+                    keywords = new ArrayList<>(List.of(words));
+                    auto = new Auto(doc_path, "FREQ", code_path, "FREQ", keywords);
+                    window.setScene(mainScene);
+                }
+                else{
+                    System.out.println("Both code and documentation files need to be selected.");
+                }
+
+            }
         });
         go_button.setMinWidth(150);
 
@@ -81,8 +106,8 @@ public class AutoDocApplication extends Application{
         //Printing document names
         var file_names = new VBox(4);
         file_names.setAlignment(Pos.CENTER);
-        var code_file_label = new Label("No Code Selected");
-        var doc_file_label = new Label("No Documentation Selected");
+        code_file_label = new Label("No Code Selected");
+        doc_file_label = new Label("No Documentation Selected");
         file_names.getChildren().addAll(code_file_label,doc_file_label);
 
         // Select code button
@@ -94,6 +119,7 @@ public class AutoDocApplication extends Application{
                 File file = codeFileChooser.showOpenDialog(window);
                 if (file != null) {
                     System.out.println(file.getAbsolutePath());
+                    code_path = file.getAbsolutePath();
                     code_file_label.setText("Code file: "+file.getName());
                 }
             }
@@ -108,6 +134,8 @@ public class AutoDocApplication extends Application{
                 File file = docFileChooser.showOpenDialog(window);
                 if (file != null) {
                     System.out.println(file.getAbsolutePath());
+                    doc_path = file.getAbsolutePath();
+                    doc_name = file.getName();
                     doc_file_label.setText("Documentation file: "+file.getName());
                 }
             }
@@ -137,10 +165,10 @@ public class AutoDocApplication extends Application{
 
         //Code requirements text
         ScrollPane code_reqs = new ScrollPane();
-        Label code_reqs_text = new Label("Hit  Check Requirements!");
+        Label code_reqs_text = new Label();
         code_reqs.setContent(code_reqs_text);
         code_reqs.setMinWidth(300);
-        code_reqs.setMaxHeight(150);
+        code_reqs.setMaxHeight(500);
 
         //Surround text with label
         VBox code_reqs_block = new VBox(10);
@@ -153,10 +181,10 @@ public class AutoDocApplication extends Application{
 
         //Doc requirements text
         ScrollPane doc_reqs = new ScrollPane();
-        Label doc_reqs_text = new Label("Hit Check Requirements!");
+        Label doc_reqs_text = new Label();
         doc_reqs.setContent(doc_reqs_text);
         doc_reqs.setMinWidth(300);
-        doc_reqs.setMaxHeight(150);
+        doc_reqs.setMaxHeight(500);
 
         //Surround text with label
         VBox doc_reqs_block = new VBox(10);
@@ -167,30 +195,79 @@ public class AutoDocApplication extends Application{
 
         doc_reqs_block.getChildren().addAll(doc_reqs_title, doc_reqs);
 
+        //Conflicts text
+        ScrollPane conflicts_scroll = new ScrollPane();
+        Label conflicts_text = new Label();
+        conflicts_scroll.setContent(conflicts_text);
+        conflicts_scroll.setMinWidth(300);
+        conflicts_scroll.setMaxHeight(500);
+
+        //Surround text with label
+        VBox conflicts_block = new VBox(10);
+        conflicts_block.setAlignment(Pos.CENTER);
+        Label conflicts_title = new Label("Conflicts");
+        conflicts_title.setFont(new Font(16));
+        conflicts_title.setUnderline(true);
+
+        conflicts_block.getChildren().addAll(conflicts_title, conflicts_scroll);
+
         // Text formatting
         HBox text_boxes = new HBox(20);
         text_boxes.setAlignment(Pos.CENTER);
-        text_boxes.getChildren().addAll(code_reqs_block, doc_reqs_block);
+        text_boxes.getChildren().addAll(new Label("Click Check Requirements to Get Started"));
+
 
         // Check + Print Requirements + Print Conflicts
         var check_requirements = new Button("Check Requirements");
         check_requirements.setMinWidth(150);
         check_requirements.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
-                code_reqs_text.setText("Hello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello");
-                doc_reqs_text.setText("Hello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello\nHello");
+                code_reqs_text.setText(auto.printCodeReqs());
+                doc_reqs_text.setText(auto.printDocReqs());
+
+                text_boxes.getChildren().clear();
+                text_boxes.getChildren().addAll(code_reqs_block, doc_reqs_block);
             }
         });
+
+        // View Conflicts in Documentation
+        var view_conflicts = new Button("View Conflicts");
+        view_conflicts.setMinWidth(150);
+        view_conflicts.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                text_boxes.getChildren().clear();
+
+                auto.check();
+
+                conflicts_text.setText(auto.printConflicts());
+
+                text_boxes.getChildren().addAll(conflicts_block);
+            }
+        });
+
+
 
         // Update Requirements in Documentation
         var update_requirements = new Button("Update Requirements");
         update_requirements.setMinWidth(150);
+        update_requirements.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                auto.update();
+
+                text_boxes.getChildren().clear();
+                text_boxes.getChildren().addAll(new Label(doc_name+" has been updated."));
+            }
+        });
+
+
+
+
 
 
         // Check + Update Buttons Box
         var buttons = new HBox(20);
         buttons.setAlignment(Pos.CENTER);
-        buttons.getChildren().addAll(check_requirements, update_requirements);
+        buttons.getChildren().addAll(check_requirements, view_conflicts, update_requirements);
 
 
         // Start over (go back) button
@@ -200,6 +277,13 @@ public class AutoDocApplication extends Application{
             @Override
             public void handle(ActionEvent actionEvent) {
                 window.setScene(startScene);
+                auto = null;
+                code_path = null;
+                doc_path = null;
+                doc_name = null;
+                doc_file_label.setText("No Documentation Selected");
+                code_file_label.setText("No Code Selected");
+
             }
         });
 
