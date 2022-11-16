@@ -152,17 +152,16 @@ class parseDoc implements Parse {
     private void parseRequirements(){
         // create a requirements list
         RequirementList list = new RequirementList();
-        Requirement requirement = new Requirement();
 
         // requirement fields
-        String tag = null, context = null;
-        ArrayList<String> headers = new ArrayList<>();
+        String tag;
+        StringBuilder context;
+        ArrayList<String> headers;
 
         // relative line with identifier
         int first = 0;
         // relative second line with identifier
         int second = 0;
-        int offest = 0;
 
         // now try to parse the requirements
         for( int line = 0; line < document.size(); line++){
@@ -186,7 +185,7 @@ class parseDoc implements Parse {
             // if first and second are set
             // get values for requirement
             tag = "";
-            context = "";
+            context = new StringBuilder();
             headers = new ArrayList<>();
 
             if(!(first == 0 || second == 0)){
@@ -201,7 +200,7 @@ class parseDoc implements Parse {
                         tag = values[2];
 
                         for (int lines = 3; lines < values.length; lines++) {
-                            context += values[lines] + " ";
+                            context.append(values[lines]).append(" ");
                         }
                     }
                     // otherwise it does not have an identifier
@@ -221,7 +220,7 @@ class parseDoc implements Parse {
                 // add the requirement to the list
                 if( tag != null ) {
                     if (tag.length() > 2){
-                        list.addRequirement(new Requirement(tag, headers, context, line - (second - first) + 1));
+                        list.addRequirement(new Requirement(tag, headers, context.toString(), line - (second - first) + 1));
                     }
                 }
 
@@ -242,33 +241,76 @@ class parseDoc implements Parse {
      * this will handle updating
      * the requirements in the actual
      * hashMap
+     * first creates a special clone
+     * then updates the original hashmap
      */
     public void updateDocument(){
-        // for each requirement in the requirement list
+
+        HashMap<Integer, String> clone = new HashMap<>();
+        ArrayList<Integer> index = new ArrayList<>() {{
+            for (int i : list.getListOfIndices()) add(i);
+        }};
+
+        int[] indices = list.getListOfIndices();
+
+        int i = 0;
+
+        for(int line = 0; line < document.size(); line++){
+            // if the line is a requirement
+            if(index.contains(line)){
+                // fill with blanks
+                for( int between = line; between <= indices[i + 1]; between++){
+                    clone.put(between, null);
+                }
+                // update indices
+                line = indices[i + 1];
+                i++;
+
+            }
+            // otherwise the line is not a requirement
+            else{
+                // control for keywords
+                boolean word = false;
+
+                // if the line contains any of the keywords
+                // set word to true
+                for(String keyword : keywords){
+                    if( document.get(line).contains(keyword) ){
+                        word = true;
+                    }
+                }
+
+                // if the line does not contain a keyword
+                if (!word) {
+                    // add the line to the clone
+                    clone.put(line, document.get(line));
+                }
+                // otherwise add a blank
+                else{
+                    clone.put(line, null);
+                }
+            }
+        }
+
         for (Requirement requirement : list.getRequirementList()){
             // replace whatever was there before and update it with
             // our updated requirement
-
             // some regex
             int spaces = 0;
+
             char[] line = document.get(requirement.getLine() - 1).toCharArray();
 
-            for(int chars = 0; chars < line.length; chars++){
-                if(line[chars] == ' '){
+            for (char c : line) {
+                if (c == ' ') {
                     spaces++;
-                }
-                else if(line[chars] != ' '){
+                } else {
                     break;
                 }
             }
-
-            // remove previous entry
-            // remove everything up to the next req
-            for(int lines = requirement.getLine(); lines < requirement.getLine() + requirement.getHeaders().size(); lines++){
-                document.replace(lines, "");
-            }
-            document.put(requirement.getLine() - 1, " ".repeat(spaces) + identifier + " " + requirement.print(spaces + 4));
+            clone.put(requirement.getLine() - 1, " ".repeat(spaces) + identifier + " " + requirement.print(spaces + 4));
         }
+
+        document = clone;
     }
 
     /**
@@ -278,20 +320,23 @@ class parseDoc implements Parse {
      */
     public void writeDoc(){
         // Try block to check if exception occurs
-        String text  = "";
+        StringBuilder text  = new StringBuilder();
+        // if it is not a blank then we can print
         for(int line = 0; line < document.size(); line++){
-            text = text + document.get(line) + "\n";
+            if(!(document.get(line) == null)) {
+                text.append(document.get(line)).append("\n");
+            }
         }
         try {
 
             // Create a FileWriter object
             // to write in the file
-            FileWriter fWriter = new FileWriter("src/srs.txt");
+            FileWriter fWriter = new FileWriter(filePath.split("\\.")[0] + "_test." + filePath.split("\\.")[1]);
 
             // Writing into file
             // Note: The content taken above inside the
             // string
-            fWriter.write(text);
+            fWriter.write(text.toString());
             // Closing the file writing connection
             fWriter.close();
 

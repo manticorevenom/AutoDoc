@@ -193,13 +193,13 @@ class Requirement {
      */
     @Override
     public String toString(){
-        String requirement = "\t\tTag: ";
-        requirement += tag + "\n\t\tContext: ";
-        requirement += context + "\n\t\tHeaders:\n\t\t\t";
+        StringBuilder requirement = new StringBuilder("\t\tTag: ");
+        requirement.append(tag).append("\n\t\tContext: ");
+        requirement.append(context).append("\n\t\tHeaders:\n\t\t\t");
         for( String header : headers ){
-            requirement += header + "\n\t\t\t";
+            requirement.append(header).append("\n\t\t\t");
         }
-        return requirement;
+        return requirement.toString();
     }
     /**
      * print
@@ -207,13 +207,13 @@ class Requirement {
      * for printing
      */
     public String print(int spaces){
-        String requirement = "";
-        requirement += tag + " ";
-        requirement += context + "\n";
+        StringBuilder requirement = new StringBuilder();
+        requirement.append(tag).append(" ");
+        requirement.append(context).append("\n");
         for (String header : headers){
-            requirement += " ".repeat(spaces) + header + "\n";
+            requirement.append(" ".repeat(spaces)).append(header).append("\n");
         }
-        return requirement;
+        return requirement.toString();
     }
     // CONSTRUCTORS ----------------------
     /**

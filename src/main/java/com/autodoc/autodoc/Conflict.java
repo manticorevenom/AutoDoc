@@ -10,7 +10,7 @@ package com.autodoc.autodoc;
 
 // conflicts will be between two requirements
 // conflicts will have some context-
-public class Conflict {
+class Conflict {
     // VARIABLES -------------------------
     /**
      * Document Requirement

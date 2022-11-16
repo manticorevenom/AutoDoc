@@ -178,7 +178,7 @@ class parseCode implements Parse {
                     first = line;
                 }
                 // otherwise set the second
-                else if( second == 0 ){
+                else {
                     second = line;
                 }
             }
@@ -189,7 +189,7 @@ class parseCode implements Parse {
 
             // if first and second are set
             // get values for requirement
-            String[] multipleTags = null;
+            String[] multipleTags;
             ArrayList<String> tags = new ArrayList<>();
 
             if(!(first == 0 || second == 0)){

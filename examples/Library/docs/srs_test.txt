@@ -86,14 +86,17 @@
             This will be the only user interface. This will be a commandline interface
 
             3.1.1.2 Functional Requirements
-            SFREQ Application.CLI - The application shall provide a CLI interface.
+            SFREQ Application.CLI - The application shall provide a CLI interface. 
                 class Application
                 public static void main(String[] args)
-            SFREQ Application.Menu - The application shall provide a menu.
+
+            SFREQ Application.Menu - The application shall provide a menu. 
                 public void menu()
                 public static void main(String[] args)
-            SFREQ Application.Options - The application shall provide menu options.
+
+            SFREQ Application.Options - The application shall provide menu options. 
                 public enum Options
+
 
         3.1.2 Hardware Interfaces
         The application will need no direct hardware interfaces. The only "hardware" interface will be through the file browser.
@@ -112,45 +115,55 @@
             The application will have book objects.
 
             3.2.1.2 Associated Functional Requirements
-            SFREQ Book - The application shall be able store book objects in inventory.
+            SFREQ Book - The application shall be able store book objects in inventory. 
                 class Book
                 public Book()
-            SFREQ Book.Author - The application will store information for the author of a book.
+
+            SFREQ Book.Author - The application will store information for the author of a book. 
                 private String Author
                 private void setAuthor(String author)
                 public String getAuthor()
-            SFREQ Book.Publish - The application will store information for the publishing date of a book.
+
+            SFREQ Book.Publish - The application will store information for the publishing date of a book. 
                 private LocalDate publishDate
                 private void setPublishDate(LocalDate date)
                 public LocalDate getPublishDate()
-            SFREQ Book.ISBN - The application shall store information for the ISBN of the book.
+
+            SFREQ Book.ISBN - The application shall store information for the ISBN of the book. 
                 private String ISBN
                 private void setISBN(String isbn)
                 public String getISBN()
-            SFREQ Book.Title - The application shall store the information for the title of a book.
+
+            SFREQ Book.Title - The application shall store the information for the title of a book. 
                 private String Title
                 private void setTitle(String title)
                 public String getTitle()
-            SFREQ Book.CopyNumber - The application shall store the information for the number of copies for a book.
+
+            SFREQ Book.CopyNumber - The application shall store the information for the number of copies for a book. 
                 private int copyNumber
                 private void setCopyNumber(int copies)
                 public int getCopyNumber()
-            SFREQ Book.checkoutList - The application shall store information about who has checked a book out.
+
+            SFREQ Book.checkoutList - The application shall store information about who has checked a book out. 
                 private ArrayList<String> checkoutList
                 private void setCheckoutList(ArrayList<String> checkout)
                 public ArrayList<String> getCheckoutList()
                 public void checkout(String name)
                 public void returnBook(String name)
-            SFREQ Book.Language - The application shall store information about the language the book is in.
+
+            SFREQ Book.Language - The application shall store information about the language the book is in. 
                 private String Language
                 private void setLanguage(String language)
                 public String getLanguage()
-            SFREQ Book.PageCount - The application shall store information about the page count for a book.
+
+            SFREQ Book.PageCount - The application shall store information about the page count for a book. 
                 private int pageCount
                 private void setPageCount(int pages)
                 public int getPageCount()
-            SFREQ Book.Print - The application shall be able to print a book
+
+            SFREQ Book.Print - The application shall be able to print a book 
                 public String toString()
+
 
         3.2.2 BookList
 
@@ -159,31 +172,70 @@
             This will support the main functionality of the program.
 
             3.2.2.2 Associated Functional Requirements
-            SFREQ BookList - The application will be able to store a BookList object.
-                class BookList
-                public BookList()
+            SFREQ BookList - The application will be able to store a BookList object. 
+                public class BookList
                 private ArrayList<Book> inventory
-            SFREQ BookList.Read - The application shall be able to read saved inventory.
+
+            SFREQ BookList.Read - The application shall be able to read saved inventory. 
                 private void read()
-            SFREQ BookList.Save - The application shall be able to save the inventory data.
+
+            SFREQ BookList.Save - The application shall be able to save the inventory data. 
                 public void save()
-            SFREQ BookList.Add - The application shall be able to add a book to the inventory.
+
+            SFREQ BookList.Add - The application shall be able to add a book to the inventory. 
                 public void add()
-                private boolean search()
-            SFREQ BookList.AddCopy - The application shall be able to add a copy of a book to the inventory.
+                private Book search(String title, String author, String isbn, String language, int pageCount)
+                private Book askForInfo()
+                private String getStringFields(String field)
+                private int getIntFields(String field)
+                private LocalDate getDate()
+                public BookList()
+
+            SFREQ BookList.AddCopy - The application shall be able to add a copy of a book to the inventory. 
                 public void addCopy()
-                private boolean search()
-            SFREQ BookList.Print - The application shall be able to print in various formats.
+                private Book search(String title, String author, String isbn, String language, int pageCount)
+                private Book askForInfo()
+                private String getStringFields(String field)
+                private int getIntFields(String field)
+                private LocalDate getDate()
+                public BookList()
+
+            SFREQ BookList.Print - The application shall be able to print in various formats. 
                 public void print()
-            SFREQ BookList.ProcessCheckout - The application shall process checkouts.
+
+            SFREQ BookList.ProcessCheckout - The application shall process checkouts. 
                 public void processCheckout()
-                private boolean search()
-            SFREQ BookList.ProcessReturn - The application shall process returns.
+                private Book search(String title, String author, String isbn, String language, int pageCount)
+                private Book askForInfo()
+                private String getStringFields(String field)
+                private int getIntFields(String field)
+                private LocalDate getDate()
+                public BookList()
+
+            SFREQ BookList.ProcessReturn - The application shall process returns. 
                 public void processReturn()
-                private boolean search()
-            SFREQ BookList.Delete - The application shall be able to delete books from inventory.
+                private Book search(String title, String author, String isbn, String language, int pageCount)
+                private Book askForInfo()
+                private String getStringFields(String field)
+                private int getIntFields(String field)
+                private LocalDate getDate()
+                public BookList()
+
+            SFREQ BookList.Delete - The application shall be able to delete books from inventory. 
                 public void delete()
-                private boolean search()
-            SFREQ BookList.DeleteCopy - The application shall be able to delete copies for a book from inventory.
+                private Book search(String title, String author, String isbn, String language, int pageCount)
+                private Book askForInfo()
+                private String getStringFields(String field)
+                private int getIntFields(String field)
+                private LocalDate getDate()
+                public BookList()
+
+            SFREQ BookList.DeleteCopy - The application shall be able to delete copies for a book from inventory. 
                 public void deleteCopy()
-                private boolean search()
+                private Book search(String title, String author, String isbn, String language, int pageCount)
+                private Book askForInfo()
+                private String getStringFields(String field)
+                private int getIntFields(String field)
+                private LocalDate getDate()
+                public BookList()
+
