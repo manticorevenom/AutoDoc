@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -242,15 +243,61 @@ class parseDoc implements Parse {
      * this will handle updating
      * the requirements in the actual
      * hashMap
+     * first creates a special clone
+     * then updates the original hashmap
      */
     public void updateDocument(){
-        // for each requirement in the requirement list
+
+        HashMap<Integer, String> clone = new HashMap<>();
+        ArrayList<Integer> index = new ArrayList<Integer>() {{ for (int i : list.getListOfIndices()) add(i); }};
+
+        int[] indices = list.getListOfIndices();
+
+        int i = 0;
+
+        for(int line = 0; line < document.size(); line++){
+            // if the line is a requirement
+            if(index.contains(line)){
+                // fill with blanks
+                for( int between = line; between <= indices[i + 1]; between++){
+                    clone.put(between, null);
+                }
+                // update indices
+                line = indices[i + 1];
+                i++;
+
+            }
+            // otherwise the line is not a requirement
+            else{
+                // control for keywords
+                boolean word = false;
+
+                // if the line contains any of the keywords
+                // set word to true
+                for(String keyword : keywords){
+                    if( document.get(line).contains(keyword) ){
+                        word = true;
+                    }
+                }
+
+                // if the line does not contain a keyword
+                if (!word) {
+                    // add the line to the clone
+                    clone.put(line, document.get(line));
+                }
+                // otherwise add a blank
+                else{
+                    clone.put(line, null);
+                }
+            }
+        }
+
         for (Requirement requirement : list.getRequirementList()){
             // replace whatever was there before and update it with
             // our updated requirement
-
             // some regex
             int spaces = 0;
+
             char[] line = document.get(requirement.getLine() - 1).toCharArray();
 
             for(int chars = 0; chars < line.length; chars++){
@@ -261,14 +308,10 @@ class parseDoc implements Parse {
                     break;
                 }
             }
-
-            // remove previous entry
-            // remove everything up to the next req
-            for(int lines = requirement.getLine(); lines < requirement.getLine() + requirement.getHeaders().size(); lines++){
-                document.replace(lines, "");
-            }
-            document.put(requirement.getLine() - 1, " ".repeat(spaces) + identifier + " " + requirement.print(spaces + 4));
+            clone.put(requirement.getLine() - 1, " ".repeat(spaces) + identifier + " " + requirement.print(spaces + 4));
         }
+
+        document = clone;
     }
 
     /**
@@ -279,14 +322,17 @@ class parseDoc implements Parse {
     public void writeDoc(){
         // Try block to check if exception occurs
         String text  = "";
+        // if it is not a blank then we can print
         for(int line = 0; line < document.size(); line++){
-            text = text + document.get(line) + "\n";
+            if(!(document.get(line) == null)) {
+                text = text + document.get(line) + "\n";
+            }
         }
         try {
 
             // Create a FileWriter object
             // to write in the file
-            FileWriter fWriter = new FileWriter("src/srs.txt");
+            FileWriter fWriter = new FileWriter(filePath.split("\\.")[0] + "_test." + filePath.split("\\.")[1]);
 
             // Writing into file
             // Note: The content taken above inside the

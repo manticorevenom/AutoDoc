@@ -36,6 +36,28 @@ class RequirementList {
     public ArrayList<Requirement> getRequirementList(){
         return requirementList;
     }
+    /**
+     * Returns a requirement in the list if
+     * a tag is matched
+     * @param tag
+     * @return
+     */
+    public Requirement getRequirementByTag(String tag){
+        return  requirementList.stream().filter(requirement -> requirement.compareTag(tag))
+                .findAny()
+                .orElse(null);
+    }
+    /**
+     * getListOfIndices
+     * @return list of ints
+     */
+    public int[] getListOfIndices(){
+        int[] indices = new int[requirementList.size()];
+        for(int i = 0; i < requirementList.size(); i++){
+            indices[i] = requirementList.get(i).getLine();
+        }
+        return indices;
+    }
     // METHODS ---------------------------
     /**
      * searches for a requirement
@@ -70,18 +92,6 @@ class RequirementList {
         else{
             return true;
         }
-    }
-
-    /**
-     * Returns a requirement in the list if
-     * a tag is matched
-     * @param tag
-     * @return
-     */
-    public Requirement getRequirementByTag(String tag){
-        return  requirementList.stream().filter(requirement -> requirement.compareTag(tag))
-                .findAny()
-                .orElse(null);
     }
     /**
      * adds a requirement to requirements list
