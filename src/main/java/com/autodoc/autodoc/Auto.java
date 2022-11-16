@@ -21,16 +21,6 @@ class Auto {
     private parseDoc document;
     private parseCode code;
     private ArrayList<Conflict> conflicts;
-
-    // might want to store a list of conflicts
-    // conflicts will be between two requirements
-    // and will have a resolution
-    // might want to create a resolution type
-    // A resolution will be a requirement to replace/update/change
-    // a requirement in the list
-    // and then figure out how to resolve them
-    // private ArrayList<Conflicts> conflicts;
-
     /**
      * Checks for missing requirements
      * If there is any missing requirements in either
@@ -44,7 +34,7 @@ class Auto {
             // and the conflict is not already in the list
             if(!code.getList().searchTag(r) && !conflicts.stream()
                     .filter(conflict -> conflict.compare(new Conflict(r, new Requirement(), "Code does not have requirement."))).findAny().isPresent()) {
-                        conflicts.add(new Conflict(r, new Requirement(), "Code does not have requirement."));
+                conflicts.add(new Conflict(r, new Requirement(), "Code does not have requirement."));
             }
         }
 
@@ -83,16 +73,20 @@ class Auto {
         }
     }
 
+    /**
+     * check
+     * checks the requirements lists
+     * from the code
+     * and the document
+     * and creates conflicts
+     */
     public void check(){
         // check for conflicts
-            // conflicts:
-            // 1). requirement in doc, not in code
-            // 2). requirement in code, not in doc
-            // 3). requirement in doc is not the same (header compare) as the requirement in code
-            // 4). requirement in code is not the same (header compare) as the requirement in doc
-        // if there is a conflict
-        // we ask how they want to resolve it
-        // then we update the document or code
+        // conflicts:
+        // 1). requirement in doc, not in code
+        // 2). requirement in code, not in doc
+        // 3). requirement in doc is not the same (header compare) as the requirement in code
+        // 4). requirement in code is not the same (header compare) as the requirement in doc
         checkForMissing();
         checkForDissimilar();
         //System.out.println(document.getList().toString());
@@ -154,27 +148,53 @@ class Auto {
             conflicts.remove(resolution);
         }
     }
+    /**
+     * print
+     * this is for the cli program
+     * @param control - value to control print
+     */
+    public void print(boolean control){
+        if(control){
+            System.out.println(printConflicts());
+        }
+        else{
+            System.out.println("Document Requirements:\n" + document.getList().toString());
+            System.out.println("Code Requirements:\n" + code.getList().toString());
+        }
+    }
 
     /**
      * printConflicts
      * prints the list of conflicts if any
+     * change to string return
      */
-    public void printConflicts(){
+    public String printConflicts(){
+        String output = "";
         if(conflicts.size() > 0){
             for(Conflict conflict : conflicts){
-                System.out.println(conflict);
+                output += conflict.toString() + "\n";
             }
         }
         else{
             System.out.println("No conflicts found.");
         }
+        return output;
     }
+
     /**
-     * printReqs
+     * printDocReqs
+     * @return string of the list of reqs
      */
-    public void printReqs(){
-        System.out.println(document.getList().toString());
-        System.out.println(code.getList().toString());
+    public String printDocReqs(){
+        return document.getList().toString();
+    }
+
+    /**
+     * printCodeReqs
+     * @return string of the list of reqs
+     */
+    public String printCodeReqs(){
+        return code.getList().toString();
     }
 
     /**

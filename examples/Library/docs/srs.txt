@@ -187,6 +187,3 @@
             SFREQ BookList.DeleteCopy - The application shall be able to delete copies for a book from inventory.
                 public void deleteCopy()
                 private boolean search()
-
-
-

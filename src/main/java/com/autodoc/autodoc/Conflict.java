@@ -92,7 +92,7 @@ public class Conflict {
      */
     @Override
     public String toString(){
-        return context + "\n" + "\tDocument Requirement:\n" + "\t\t" + docReq + "\n" + "\tCode Requirement:\n" + "\t\t" + codeReq;
+        return context + "\n" + "\tDocument Requirement:\n" + docReq.toString() + "\n" + "\tCode Requirement:\n" + codeReq.toString();
     }
 
     // CONSTRUCTORS -------------------------

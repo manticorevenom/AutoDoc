@@ -193,17 +193,18 @@ class Requirement {
      */
     @Override
     public String toString(){
-        String requirement = "";
-        requirement += tag + " ";
+        String requirement = "\t\tTag: ";
+        requirement += tag + "\n\t\tContext: ";
+        requirement += context + "\n\t\tHeaders:\n\t\t\t";
         for( String header : headers ){
-            requirement += header + " ";
+            requirement += header + "\n\t\t\t";
         }
-        requirement += context + " ";
-        requirement += line;
         return requirement;
     }
     /**
      * print
+     * returns a formatted string
+     * for printing
      */
     public String print(int spaces){
         String requirement = "";

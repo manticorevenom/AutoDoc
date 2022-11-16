@@ -152,7 +152,7 @@ class RequirementList {
     public String toString(){
         String requirements = "";
         for (Requirement requirement : requirementList){
-            requirements += requirement + "\n";
+            requirements += "\tRequirement:\n" + requirement.toString() + "\n";
         }
         return requirements;
     }

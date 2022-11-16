@@ -15,9 +15,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 class parseDoc implements Parse {
     // VARIABLES -------------------------
@@ -265,7 +262,6 @@ class parseDoc implements Parse {
                 }
             }
 
-            System.out.println(spaces);
             // remove previous entry
             // remove everything up to the next req
             for(int lines = requirement.getLine(); lines < requirement.getLine() + requirement.getHeaders().size(); lines++){
@@ -274,6 +270,12 @@ class parseDoc implements Parse {
             document.put(requirement.getLine() - 1, " ".repeat(spaces) + identifier + " " + requirement.print(spaces + 4));
         }
     }
+
+    /**
+     * writeDoc
+     * this method creates the updated document
+     * based the updated requirements
+     */
     public void writeDoc(){
         // Try block to check if exception occurs
         String text  = "";

@@ -152,7 +152,10 @@ class parseCode implements Parse {
         this.parseRequirements();
     }
     /**
-     *
+     * parseRequirements
+     * this method is responsible
+     * for creating the requirements
+     * and adding them to the list
      */
     private void parseRequirements(){
         // create a requirements list
@@ -244,7 +247,6 @@ class parseCode implements Parse {
         setList(reqs);
     }
     // CONSTRUCTORS ----------------------
-
     /**
      * Defaulted no parameter constructor
      */
