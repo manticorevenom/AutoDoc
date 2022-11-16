@@ -1,3 +1,9 @@
+```
+Author: manticorevenom
+Date: 2022.11.16
+Version: 1.0 (current)
+```
+****
 # AutoDoc
 The purpose of this project is to aid in generation of software artifacts through a specific framework
 Currently the program updates documents using source code files.
