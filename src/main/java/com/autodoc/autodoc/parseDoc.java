@@ -71,10 +71,10 @@ class parseDoc implements Parse {
     }
     /**
      * setKeywords
-     * @param keywords - keyword list
+     * @param keywords_in - keyword list
      */
-    public void setKeywords(ArrayList<String> keywords){
-        parseDoc.keywords = keywords;}
+    public void setKeywords(ArrayList<String> keywords_in){
+        keywords = keywords_in;}
     // GETTERS ---------------------------
     /**
      * getList

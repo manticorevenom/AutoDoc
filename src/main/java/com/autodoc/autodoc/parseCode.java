@@ -75,10 +75,11 @@ class parseCode implements Parse {
     }
     /**
      * setKeywords
-     * @param keywords - keyword list
+     * @param keywords_in - keyword list
      */
-    public void setKeywords(ArrayList<String> keywords){
-        parseDoc.keywords = keywords;}
+    public void setKeywords(ArrayList<String> keywords_in){
+        keywords = keywords_in;
+    }
     // GETTERS ---------------------------
 
     /**
@@ -266,12 +267,12 @@ class parseCode implements Parse {
      * @param fp - file path for parse code
      * @param id - identifier for searching
      */
-    public parseCode(RequirementList reqs, String fp, String id, ArrayList<String> keywords){
+    public parseCode(RequirementList reqs, String fp, String id, ArrayList<String> keywords_in){
         setList(reqs);
         setFilePath(fp);
         setIdentifier(id);
         setCode(new HashMap<>());
-        setKeywords(keywords);
+        setKeywords(keywords_in);
         read();
     }
 }
