@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -153,17 +152,16 @@ class parseDoc implements Parse {
     private void parseRequirements(){
         // create a requirements list
         RequirementList list = new RequirementList();
-        Requirement requirement = new Requirement();
 
         // requirement fields
-        String tag = null, context = null;
-        ArrayList<String> headers = new ArrayList<>();
+        String tag;
+        StringBuilder context;
+        ArrayList<String> headers;
 
         // relative line with identifier
         int first = 0;
         // relative second line with identifier
         int second = 0;
-        int offest = 0;
 
         // now try to parse the requirements
         for( int line = 0; line < document.size(); line++){
@@ -187,7 +185,7 @@ class parseDoc implements Parse {
             // if first and second are set
             // get values for requirement
             tag = "";
-            context = "";
+            context = new StringBuilder();
             headers = new ArrayList<>();
 
             if(!(first == 0 || second == 0)){
@@ -202,7 +200,7 @@ class parseDoc implements Parse {
                         tag = values[2];
 
                         for (int lines = 3; lines < values.length; lines++) {
-                            context += values[lines] + " ";
+                            context.append(values[lines]).append(" ");
                         }
                     }
                     // otherwise it does not have an identifier
@@ -222,7 +220,7 @@ class parseDoc implements Parse {
                 // add the requirement to the list
                 if( tag != null ) {
                     if (tag.length() > 2){
-                        list.addRequirement(new Requirement(tag, headers, context, line - (second - first) + 1));
+                        list.addRequirement(new Requirement(tag, headers, context.toString(), line - (second - first) + 1));
                     }
                 }
 
@@ -249,7 +247,9 @@ class parseDoc implements Parse {
     public void updateDocument(){
 
         HashMap<Integer, String> clone = new HashMap<>();
-        ArrayList<Integer> index = new ArrayList<Integer>() {{ for (int i : list.getListOfIndices()) add(i); }};
+        ArrayList<Integer> index = new ArrayList<>() {{
+            for (int i : list.getListOfIndices()) add(i);
+        }};
 
         int[] indices = list.getListOfIndices();
 
@@ -300,11 +300,10 @@ class parseDoc implements Parse {
 
             char[] line = document.get(requirement.getLine() - 1).toCharArray();
 
-            for(int chars = 0; chars < line.length; chars++){
-                if(line[chars] == ' '){
+            for (char c : line) {
+                if (c == ' ') {
                     spaces++;
-                }
-                else if(line[chars] != ' '){
+                } else {
                     break;
                 }
             }
@@ -321,11 +320,11 @@ class parseDoc implements Parse {
      */
     public void writeDoc(){
         // Try block to check if exception occurs
-        String text  = "";
+        StringBuilder text  = new StringBuilder();
         // if it is not a blank then we can print
         for(int line = 0; line < document.size(); line++){
             if(!(document.get(line) == null)) {
-                text = text + document.get(line) + "\n";
+                text.append(document.get(line)).append("\n");
             }
         }
         try {
@@ -337,7 +336,7 @@ class parseDoc implements Parse {
             // Writing into file
             // Note: The content taken above inside the
             // string
-            fWriter.write(text);
+            fWriter.write(text.toString());
             // Closing the file writing connection
             fWriter.close();
 

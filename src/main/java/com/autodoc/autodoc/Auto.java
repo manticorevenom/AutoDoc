@@ -14,13 +14,11 @@ package com.autodoc.autodoc;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 class Auto {
-    private parseDoc document;
-    private parseCode code;
-    private ArrayList<Conflict> conflicts;
+    private final parseDoc document;
+    private final parseCode code;
+    private final ArrayList<Conflict> conflicts;
     /**
      * Checks for missing requirements
      * If there is any missing requirements in either
@@ -32,8 +30,8 @@ class Auto {
         for(Requirement r : document.getList().getRequirementList()){
             // if the requirement is not in the list
             // and the conflict is not already in the list
-            if(!code.getList().searchTag(r) && !conflicts.stream()
-                    .filter(conflict -> conflict.compare(new Conflict(r, new Requirement(), "Code does not have requirement."))).findAny().isPresent()) {
+            if(!code.getList().searchTag(r) && conflicts.stream()
+                    .noneMatch(conflict -> conflict.compare(new Conflict(r, new Requirement(), "Code does not have requirement.")))) {
                 conflicts.add(new Conflict(r, new Requirement(), "Code does not have requirement."));
             }
         }
@@ -42,8 +40,8 @@ class Auto {
         for(Requirement r : code.getList().getRequirementList()){
             // if the requirement is not in the list
             // and the conflict is not already in the list
-            if(!document.getList().searchTag(r) && !conflicts.stream()
-                    .filter(conflict -> conflict.compare(new Conflict(new Requirement(), r, "Document does not have requirement."))).findAny().isPresent()){
+            if(!document.getList().searchTag(r) && conflicts.stream()
+                    .noneMatch(conflict -> conflict.compare(new Conflict(new Requirement(), r, "Document does not have requirement.")))){
                 conflicts.add(new Conflict(new Requirement(), r, "Document does not have requirement."));
             }
         }
@@ -89,8 +87,6 @@ class Auto {
         // 4). requirement in code is not the same (header compare) as the requirement in doc
         checkForMissing();
         checkForDissimilar();
-        //System.out.println(document.getList().toString());
-        //System.out.println(code.getList().toString());
 
     }
 
@@ -117,7 +113,6 @@ class Auto {
      * requirements to fit the code requirements
      */
     public void updateDocumentToFitCode(){
-        RequirementList list = document.getList();
         // go through the conflicts and resolve the conflicts
         ArrayList<Conflict> resolved = new ArrayList<>();
         for(Conflict conflict : conflicts){
@@ -169,16 +164,16 @@ class Auto {
      * change to string return
      */
     public String printConflicts(){
-        String output = "";
+        StringBuilder output = new StringBuilder();
         if(conflicts.size() > 0){
             for(Conflict conflict : conflicts){
-                output += conflict.toString() + "\n";
+                output.append(conflict.toString()).append("\n");
             }
         }
         else{
             System.out.println("No conflicts found.");
         }
-        return output;
+        return output.toString();
     }
 
     /**

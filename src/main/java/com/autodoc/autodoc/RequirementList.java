@@ -39,8 +39,8 @@ class RequirementList {
     /**
      * Returns a requirement in the list if
      * a tag is matched
-     * @param tag
-     * @return
+     * @param tag - tag for the requirement
+     * @return the requirement with the tag
      */
     public Requirement getRequirementByTag(String tag){
         return  requirementList.stream().filter(requirement -> requirement.compareTag(tag))
@@ -65,15 +65,10 @@ class RequirementList {
      * @return boolean depending on found
      */
     public boolean searchRequirement(Requirement search){
-        Requirement contain =  requirementList.stream().filter(requirement -> search.compareRequirement(requirement))
+        Requirement contain =  requirementList.stream().filter(search::compareRequirement)
                 .findAny()
                 .orElse(null);
-        if(contain == null){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return contain != null;
     }
 
     /**
@@ -86,12 +81,7 @@ class RequirementList {
         Requirement contain =  requirementList.stream().filter(requirement -> search.compareTag(requirement.getTag()))
                 .findAny()
                 .orElse(null);
-        if(contain == null){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return contain != null;
     }
     /**
      * adds a requirement to requirements list
@@ -160,11 +150,11 @@ class RequirementList {
      */
     @Override
     public String toString(){
-        String requirements = "";
+        StringBuilder requirements = new StringBuilder();
         for (Requirement requirement : requirementList){
-            requirements += "\tRequirement:\n" + requirement.toString() + "\n";
+            requirements.append("\tRequirement:\n").append(requirement.toString()).append("\n");
         }
-        return requirements;
+        return requirements.toString();
     }
     // CONSTRUCTORS ----------------------
     /**
