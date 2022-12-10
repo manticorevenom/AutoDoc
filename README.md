@@ -10,7 +10,7 @@ Currently the program updates documents using source code files.
 ****
 # Installing
 <b>Dependencies:</b>
-Make sure you have at least Java version ```OpenJDK 18.0.2```.
+Make sure you have at least Java version ```liberica 19.0.1```.
 
 Download the latest release.
 ****
